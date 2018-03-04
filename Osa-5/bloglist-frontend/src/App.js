@@ -44,7 +44,6 @@ class App extends React.Component {
 
   login = async (event) => {
     event.preventDefault()
-    console.log(event.target.username.value)
     try {
       const user = await loginService.login({
         username: this.state.username,
