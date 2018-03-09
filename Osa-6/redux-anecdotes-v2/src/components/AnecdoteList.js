@@ -2,6 +2,7 @@ import React from 'react'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
 import { createNotification, resetNotification } from '../reducers/notificationReducer'
 import { connect } from 'react-redux'
+import anecdoteService from '../services/anecdotes'
 
 let timer = null
 
@@ -13,9 +14,10 @@ class AnecdoteList extends React.Component {
       }, 5000)
     const clearTimer = () => clearTimeout(timer)
 
-    const vote = (id) => () => {
-      const anecdote = this.props.anecdotes.anecdotes.find(anecdote => anecdote.id === id)
-      this.props.voteAnecdote(anecdote.id)
+    const vote = (id) => async () => {
+      const anecdote = this.props.anecdotes.find(anecdote => anecdote.id === id)
+      const updatedAnecdote = await anecdoteService.update({ ...anecdote, votes: anecdote.votes + 1 })
+      this.props.voteAnecdote(updatedAnecdote)
       this.props.createNotification(`You voted ${anecdote.content}`)
       clearTimer()
       startTimer()

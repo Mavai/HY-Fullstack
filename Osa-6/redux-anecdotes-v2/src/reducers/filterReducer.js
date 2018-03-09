@@ -2,9 +2,9 @@ const initialState = ''
 
 const filterRefucer = (state = initialState, action) => {
   switch (action.type) {
-    case 'UPDATE':
+    case 'UPDATE_FILTER':
       return action.content
-    case 'RESET':
+    case 'RESET_FILTER':
       return initialState
     default:
       return state
@@ -12,12 +12,12 @@ const filterRefucer = (state = initialState, action) => {
 }
 
 export const updateFilter = (content) => ({
-  type: 'UPDATE',
+  type: 'UPDATE_FILTER',
   content
 })
 
 export const resetFilter = () => ({
-  type: 'RESET'
+  type: 'RESET_FILTER'
 })
 
 export default filterRefucer
