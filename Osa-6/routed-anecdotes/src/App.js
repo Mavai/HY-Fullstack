@@ -1,19 +1,32 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, Redirect, NavLink } from 'react-router-dom'
+import { Container, Table, Grid, Image, Menu } from 'semantic-ui-react'
 
-const Menu = ({ anecdotes, handleSubmit }) => {
+const Menubar = ({ anecdotes, handleSubmit }) => {
   const menuStyle = {
     backgroundColor: 'lightBlue',
     padding: 10
   }
   return (
-    <div style={menuStyle}>
-      <div>
-        <NavLink activeStyle={{ backgroundColor: 'cyan', padding: 10 }} exact to='/'>anecdotes</NavLink>&nbsp;
-        <NavLink activeStyle={{ backgroundColor: 'cyan', padding: 10 }} exact to='/create'>create new</NavLink>&nbsp;
-        <NavLink activeStyle={{ backgroundColor: 'cyan', padding: 10 }} exact to='/about'>about</NavLink>&nbsp;
-      </div>
-    </div>
+    <Menu>
+      <Menu.Item
+        name='Anecdotes'
+        as={NavLink} exact
+        to='/'
+        activeClassName='active'
+      />
+      <Menu.Item
+        name='Create new'
+        as={NavLink}
+        exact to='/create'
+        activeClassName='active' />
+      <Menu.Item
+        name='About'
+        as={NavLink}
+        exact
+        to='/about'
+        activeClassName='active' />
+    </Menu>
   )
 }
 
@@ -27,27 +40,38 @@ const Anecdote = ({ anecdote }) => (
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote =>
-        <li key={anecdote.id} >
-          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
-        </li>
-      )}
-    </ul>
+    <Table>
+      <Table.Body>
+        {anecdotes.map(anecdote =>
+          <Table.Row key={anecdote.id} >
+            <Table.Cell>
+              <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+            </Table.Cell>
+          </Table.Row>
+        )}
+      </Table.Body>
+    </Table>
   </div>
 )
 
 const About = () => (
   <div>
     <h2>About anecdote app</h2>
-    <p>According to Wikipedia:</p>
+    <Grid>
+      <Grid.Column width={10}>
+        <p>According to Wikipedia:</p>
 
-    <em>An anecdote is a brief, revealing account of an individual person or an incident.
-      Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
-      such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
+        <em>An anecdote is a brief, revealing account of an individual person or an incident.
+          Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
+          such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
       An anecdote is "a story with a point."</em>
 
-    <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
+        <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
+      </Grid.Column>
+      <Grid.Column width={6}>
+        <Image src='https://upload.wikimedia.org/wikipedia/commons/d/d9/Edsger_Wybe_Dijkstra.jpg' size='small' />
+      </Grid.Column>
+    </Grid>
   </div>
 )
 
@@ -178,18 +202,20 @@ class App extends React.Component {
 
   render() {
     return (
-      <Router>
-        <div>
-          <h1>Software anecdotes</h1>
-          <Menu anecdotes={this.state.anecdotes} handleSubmit={this.addNew} />
-          {this.state.notification && <Notification content={this.state.notification} />}
-          <Route exact path='/' render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
-          <Route path='/about' render={() => <About />} />
-          <Route exact path='/create' render={({ history }) => <CreateNew history={history} addNew={this.addNew} />} />
-          <Route exact path='/anecdotes/:id' render={({ match }) => <Anecdote anecdote={this.state.anecdotes.find(anecdote => anecdote.id === match.params.id)} />} />
-          <Footer />
-        </div>
-      </Router>
+      <Container>
+        <Router>
+          <div>
+            <h1>Software anecdotes</h1>
+            <Menubar anecdotes={this.state.anecdotes} handleSubmit={this.addNew} />
+            {this.state.notification && <Notification content={this.state.notification} />}
+            <Route exact path='/' render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
+            <Route path='/about' render={() => <About />} />
+            <Route exact path='/create' render={({ history }) => <CreateNew history={history} addNew={this.addNew} />} />
+            <Route exact path='/anecdotes/:id' render={({ match }) => <Anecdote anecdote={this.state.anecdotes.find(anecdote => anecdote.id === match.params.id)} />} />
+          </div>
+        </Router>
+        <Footer />
+      </Container>
     );
   }
 }
