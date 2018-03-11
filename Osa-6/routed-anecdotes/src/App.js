@@ -1,15 +1,21 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Redirect, NavLink } from 'react-router-dom'
 
-const Menu = ({ anecdotes, handleSubmit }) => (
-  <div>
-    <div>
-        <Link to='/'>anecdotes</Link>&nbsp;
-        <Link to='/create'>create new</Link>&nbsp;
-        <Link to='/about'>about</Link>&nbsp;
+const Menu = ({ anecdotes, handleSubmit }) => {
+  const menuStyle = {
+    backgroundColor: 'lightBlue',
+    padding: 10
+  }
+  return (
+    <div style={menuStyle}>
+      <div>
+        <NavLink activeStyle={{ backgroundColor: 'cyan', padding: 10 }} exact to='/'>anecdotes</NavLink>&nbsp;
+        <NavLink activeStyle={{ backgroundColor: 'cyan', padding: 10 }} exact to='/create'>create new</NavLink>&nbsp;
+        <NavLink activeStyle={{ backgroundColor: 'cyan', padding: 10 }} exact to='/about'>about</NavLink>&nbsp;
       </div>
-  </div>
-)
+    </div>
+  )
+}
 
 const Anecdote = ({ anecdote }) => (
   <div>
@@ -104,9 +110,20 @@ class CreateNew extends React.Component {
   }
 }
 
-const Notification = ({ content }) => (
-  <p>{content}</p>
-)
+const Notification = ({ content }) => {
+  const notificationStyle = {
+    margin: 25,
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderColor: 'green',
+    padding: 10,
+    color: 'green',
+    fontSize: 20
+  }
+  return (
+    <p style={notificationStyle}>{content}</p>
+  )
+}
 
 class App extends React.Component {
   constructor() {
@@ -165,7 +182,7 @@ class App extends React.Component {
         <div>
           <h1>Software anecdotes</h1>
           <Menu anecdotes={this.state.anecdotes} handleSubmit={this.addNew} />
-          <Notification content={this.state.notification} />
+          {this.state.notification && <Notification content={this.state.notification} />}
           <Route exact path='/' render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
           <Route path='/about' render={() => <About />} />
           <Route exact path='/create' render={({ history }) => <CreateNew history={history} addNew={this.addNew} />} />
